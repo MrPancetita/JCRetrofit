@@ -1,6 +1,8 @@
 package net.iessochoa.sergiocontreras.jcretrofit.retrofit
 
 import net.iessochoa.sergiocontreras.jcretrofit.entities.UserInfo
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * Project: JC Retrofit
@@ -16,6 +18,12 @@ class RemoteDatabase {
         onLogin: () -> Unit,
         onError: (String) -> Unit
     ) {
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
         if(user.email.contains("@")) {
             onLogin()
         } else {

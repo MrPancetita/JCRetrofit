@@ -53,6 +53,8 @@ dependencies {
 
 
     implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
 
 
 
