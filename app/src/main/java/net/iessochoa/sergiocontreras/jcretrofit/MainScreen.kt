@@ -4,6 +4,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Login
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -12,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -60,9 +66,40 @@ fun MainView(
                 text = stringResource(R.string.main_login_title),
                 style = Typography.headlineSmall
             )
+
+            OutlinedTextField(
+                value = emailValue,
+                onValueChange = { emailValue = it },
+                modifier = Modifier
+                    .padding(top = dimensionResource(R.dimen.common_padding_min)),
+                label = { Text (text = stringResource(R.string.main_hint_email))}
+            )
+
+            OutlinedTextField(
+                value = passwordValue,
+                onValueChange = { passwordValue = it },
+                modifier = Modifier
+                    .padding(top = dimensionResource(R.dimen.common_padding_min)),
+                label = { Text (text = stringResource(R.string.main_hint_password))}
+            )
+
+            Button(
+                onClick = { onClick() }
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.Login,
+                    contentDescription = null,
+                    modifier = Modifier.padding(end = dimensionResource(R.dimen.common_padding_min))
+                )
+                Text(text = stringResource(R.string.main_btn_login))
+            }
+
+
         }
 
 
     }
+
+
 
 }
