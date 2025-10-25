@@ -21,6 +21,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import net.iessochoa.sergiocontreras.jcretrofit.entities.UserInfo
 import net.iessochoa.sergiocontreras.jcretrofit.ui.theme.JCRetrofitTheme
 import net.iessochoa.sergiocontreras.jcretrofit.ui.theme.Typography
 
@@ -41,7 +42,7 @@ fun MainPreview() {
                 .padding(top = 24.dp),
             inProgres = false,
             onGoUsers = { },
-            onClick = { }
+            onClick = { _, -> }
         )
     }
 }
@@ -51,7 +52,7 @@ fun MainView(
     modifier: Modifier,
     inProgres: Boolean = false,
     onGoUsers: () -> Unit,
-    onClick: () -> Unit)
+    onClick: (UserInfo) -> Unit)
 {
     var emailValue by remember { mutableStateOf("") }
     var passwordValue by remember { mutableStateOf("")}
@@ -84,7 +85,9 @@ fun MainView(
             )
 
             Button(
-                onClick = { onClick() }
+                onClick = { onClick(
+                    UserInfo(emailValue, passwordValue)
+                ) }
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Login,
