@@ -20,7 +20,7 @@ class RemoteDatabase {
     ) {
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("")
+            .baseUrl("https://reqres.in")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
