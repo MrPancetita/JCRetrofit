@@ -24,7 +24,7 @@ class RemoteDatabase(private val scope: CoroutineScope) {
     ) {
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://reqres.in")
+            .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

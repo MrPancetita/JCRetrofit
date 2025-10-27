@@ -1,6 +1,7 @@
 package net.iessochoa.sergiocontreras.jcretrofit.entities
 
 import com.google.gson.annotations.SerializedName
+import net.iessochoa.sergiocontreras.jcretrofit.retrofit.Constants
 
 /**
  * Project: JC Retrofit
@@ -12,6 +13,6 @@ import com.google.gson.annotations.SerializedName
 
 
 class UserInfo(
-    @SerializedName("email") val email: String,
-    @SerializedName("password") val pass: String
+    @SerializedName(Constants.EMAIL_PARAM) val email: String,
+    @SerializedName(Constants.PASSWORD_PARAM) val pass: String
 )

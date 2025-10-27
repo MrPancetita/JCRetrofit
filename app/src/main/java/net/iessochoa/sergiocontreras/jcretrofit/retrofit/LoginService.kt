@@ -15,6 +15,6 @@ import retrofit2.http.POST
  */
 interface LoginService {
     @Headers("x-api-key: reqres-free-v1")
-    @POST("/api/login")
+    @POST(Constants.API_PATH + Constants.LOGIN_PATH)
     suspend fun loginUser(@Body user: UserInfo): LoginResponse
 }
