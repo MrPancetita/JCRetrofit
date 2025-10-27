@@ -3,6 +3,7 @@ package net.iessochoa.sergiocontreras.jcretrofit.retrofit
 import net.iessochoa.sergiocontreras.jcretrofit.entities.LoginResponse
 import net.iessochoa.sergiocontreras.jcretrofit.entities.UserInfo
 import retrofit2.http.Body
+import retrofit2.http.Headers
 import retrofit2.http.POST
 
 /**
@@ -13,6 +14,7 @@ import retrofit2.http.POST
  * Creado en Settings -> Editor -> File and Code Templates
  */
 interface LoginService {
+    @Headers("x-api-key: reqres-free-v1")
     @POST("/api/login")
     suspend fun loginUser(@Body user: UserInfo): LoginResponse
 }

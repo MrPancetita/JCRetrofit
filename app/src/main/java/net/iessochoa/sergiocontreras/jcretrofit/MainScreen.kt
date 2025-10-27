@@ -54,8 +54,8 @@ fun MainView(
     onGoUsers: () -> Unit,
     onClick: (UserInfo) -> Unit)
 {
-    var emailValue by remember { mutableStateOf("") }
-    var passwordValue by remember { mutableStateOf("")}
+    var emailValue by remember { mutableStateOf("eve.holt@reqres.in") }
+    var passwordValue by remember { mutableStateOf("cityslicka")}
 
     Box(modifier = modifier) {
         Column (

@@ -1,5 +1,6 @@
 package net.iessochoa.sergiocontreras.jcretrofit.retrofit
 
+import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,6 +32,7 @@ class RemoteDatabase(private val scope: CoroutineScope) {
 
         scope.launch(Dispatchers.IO) {
             val result = service.loginUser(user)
+            Log.i("SERGIO", "login: ${result.token}")
             if (result.token.isNotEmpty()) onLogin() //Si hemos logeado bien
         }
 

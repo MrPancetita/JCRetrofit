@@ -14,6 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import net.iessochoa.sergiocontreras.jcretrofit.retrofit.RemoteDatabase
 import net.iessochoa.sergiocontreras.jcretrofit.ui.theme.JCRetrofitTheme
 
@@ -48,8 +50,11 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun launchProfile() {
-        Toast.makeText(this, "Entrando perfil del usuario...", Toast.LENGTH_SHORT).show()
+        lifecycleScope.launch(Dispatchers.Main) {
+            Toast.makeText(this@MainActivity, "Entrando perfil del usuario...", Toast.LENGTH_SHORT).show()
+        }
     }
+
 }
 
 
