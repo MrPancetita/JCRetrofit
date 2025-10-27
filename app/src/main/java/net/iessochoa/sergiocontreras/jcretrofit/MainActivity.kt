@@ -13,12 +13,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
 import net.iessochoa.sergiocontreras.jcretrofit.retrofit.RemoteDatabase
 import net.iessochoa.sergiocontreras.jcretrofit.ui.theme.JCRetrofitTheme
 
 class MainActivity : ComponentActivity() {
 
-    private val db: RemoteDatabase by lazy { RemoteDatabase() }
+    private val db: RemoteDatabase by lazy { RemoteDatabase(lifecycleScope) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,5 +1,8 @@
 package net.iessochoa.sergiocontreras.jcretrofit.retrofit
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import net.iessochoa.sergiocontreras.jcretrofit.entities.UserInfo
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -11,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  * On: 25/10/2025 at 22:51
  * Creado en Settings -> Editor -> File and Code Templates
  */
-class RemoteDatabase {
+class RemoteDatabase(private val scope: CoroutineScope) {
 
     fun login(
         user: UserInfo,
@@ -24,10 +27,25 @@ class RemoteDatabase {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
+        val service = retrofit.create(LoginService::class.java)
+
+        scope.launch(Dispatchers.IO) {
+            val result = service.loginUser(user)
+            if (result.token.isNotEmpty()) onLogin() //Si hemos logeado bien
+        }
+
+        /* ESTO ERA TEMPORAL
         if(user.email.contains("@")) {
             onLogin()
         } else {
             onError(":(")
-        }
+        }*/
     }
 }
+
+/* DATOS DEL ENDPOINT FOR TEST
+{
+    "email": "eve.holt@reqres.in",
+    "password": "cityslicka"
+}
+ */
