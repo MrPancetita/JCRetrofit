@@ -10,6 +10,7 @@ package net.iessochoa.sergiocontreras.jcretrofit.retrofit
 object Constants {
     const val API_PATH = "/api"
     const val LOGIN_PATH = "/login"
+    const val REGISTER_PATH = "/register"
     const val BASE_URL = "https://reqres.in"
     const val EMAIL_PARAM = "email"
     const val PASSWORD_PARAM = "password"

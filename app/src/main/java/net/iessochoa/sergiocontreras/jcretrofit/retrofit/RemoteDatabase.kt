@@ -46,6 +46,33 @@ class RemoteDatabase(private val scope: CoroutineScope, private val context: Con
             }
         }
 
+    fun register(
+        user: UserInfo,
+        onRegister: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl(Constants.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val service = retrofit.create(LoginService::class.java)
+
+        scope.launch(Dispatchers.IO) {
+            try {
+                val result = service.registerUser(user)
+                Log.i("SERGIO", "register: ${result.id}")
+                if (result.token.isNotEmpty()) onLogin() //Si hemos logeado bien }
+            } catch (e: Exception) {
+                (e as? HttpException)?.let {
+                    val error = checkError(e)
+                    onError(error)
+                }
+            }
+        }
+    }
+
 
 
         /* ESTO ERA TEMPORAL

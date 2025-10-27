@@ -1,6 +1,8 @@
 package net.iessochoa.sergiocontreras.jcretrofit.retrofit
 
+import net.iessochoa.sergiocontreras.jcretrofit.R
 import net.iessochoa.sergiocontreras.jcretrofit.entities.LoginResponse
+import net.iessochoa.sergiocontreras.jcretrofit.entities.RegisterResponse
 import net.iessochoa.sergiocontreras.jcretrofit.entities.UserInfo
 import retrofit2.http.Body
 import retrofit2.http.Headers
@@ -17,4 +19,8 @@ interface LoginService {
     @Headers("x-api-key: reqres-free-v1")
     @POST(Constants.API_PATH + Constants.LOGIN_PATH)
     suspend fun loginUser(@Body user: UserInfo): LoginResponse
+    
+    @Headers("x-api-key: reqres-free-v1")
+    @POST(Constants.API_PATH + Constants.REGISTER_PATH)
+    suspend fun registerUser(@Body user: UserInfo): RegisterResponse
 }
