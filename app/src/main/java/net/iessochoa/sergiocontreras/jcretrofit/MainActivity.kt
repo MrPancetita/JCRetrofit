@@ -9,8 +9,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
@@ -21,14 +25,21 @@ import net.iessochoa.sergiocontreras.jcretrofit.ui.theme.JCRetrofitTheme
 
 class MainActivity : ComponentActivity() {
 
-    private val db: RemoteDatabase by lazy { RemoteDatabase(lifecycleScope) }
+    private val db: RemoteDatabase by lazy { RemoteDatabase(lifecycleScope, this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             JCRetrofitTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+
+                val snackBarHostState = remember { SnackbarHostState() }
+                val scope = rememberCoroutineScope()
+
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    snackbarHost = { SnackbarHost(snackBarHostState) }
+                ) { innerPadding ->
                    MainView(Modifier.padding(
                        paddingValues = innerPadding),
                        inProgres = false,
@@ -40,6 +51,10 @@ class MainActivity : ComponentActivity() {
                                 },
                                 onError = { error ->
                                     Log.e("SERGIO", "onCreate: $error")
+                                    scope.launch {
+                                        snackBarHostState.showSnackbar(error)
+                                    }
+
                                 }
                             )
                        }

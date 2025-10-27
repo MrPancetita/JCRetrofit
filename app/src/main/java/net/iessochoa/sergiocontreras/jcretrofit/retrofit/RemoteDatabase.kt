@@ -1,10 +1,13 @@
 package net.iessochoa.sergiocontreras.jcretrofit.retrofit
 
+import android.content.Context
 import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import net.iessochoa.sergiocontreras.jcretrofit.R
 import net.iessochoa.sergiocontreras.jcretrofit.entities.UserInfo
+import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -15,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  * On: 25/10/2025 at 22:51
  * Creado en Settings -> Editor -> File and Code Templates
  */
-class RemoteDatabase(private val scope: CoroutineScope) {
+class RemoteDatabase(private val scope: CoroutineScope, private val context: Context) {
 
     fun login(
         user: UserInfo,
@@ -31,10 +34,19 @@ class RemoteDatabase(private val scope: CoroutineScope) {
         val service = retrofit.create(LoginService::class.java)
 
         scope.launch(Dispatchers.IO) {
-            val result = service.loginUser(user)
-            Log.i("SERGIO", "login: ${result.token}")
-            if (result.token.isNotEmpty()) onLogin() //Si hemos logeado bien
+            try{
+                val result = service.loginUser(user)
+                Log.i("SERGIO", "login: ${result.token}")
+                if (result.token.isNotEmpty()) onLogin() //Si hemos logeado bien }
+            } catch (e: Exception){
+                (e as? HttpException)?.let {
+                    val error = checkError(e)
+                    onError(error)
+                }
+            }
         }
+
+
 
         /* ESTO ERA TEMPORAL
         if(user.email.contains("@")) {
@@ -43,11 +55,13 @@ class RemoteDatabase(private val scope: CoroutineScope) {
             onError(":(")
         }*/
     }
+
+    private fun checkError(e: HttpException): String = when(e.code()) {
+        400 -> context.getString(R.string.main_error_server_400)
+        401 -> context.getString(R.string.main_error_server_401)
+        403 -> context.getString(R.string.main_error_server_403)
+        else -> context.getString(R.string.main_error_default)
+    }
+
 }
 
-/* DATOS DEL ENDPOINT FOR TEST
-{
-    "email": "eve.holt@reqres.in",
-    "password": "cityslicka"
-}
- */

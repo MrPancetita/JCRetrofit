@@ -4,4 +4,8 @@
     <string name="main_hint_email">email</string>
     <string name="main_hint_password">contraseña</string>
     <string name="main_btn_login">Entrar</string>
+    <string name="main_error_server_400">Bad request</string>
+    <string name="main_error_server_401">Unauthorized</string>
+    <string name="main_error_server_403">Forbidden</string>
+    <string name="main_error_default">Any other error</string>
 </resources>
