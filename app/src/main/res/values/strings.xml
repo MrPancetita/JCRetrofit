@@ -10,4 +10,5 @@
     <string name="main_error_default">Any other error</string>
     <string name="main_switch_login">Login</string>
     <string name="main_switch_register">Registrar</string>
+    <string name="title_activity_profile">ProfileActivity</string>
 </resources>
