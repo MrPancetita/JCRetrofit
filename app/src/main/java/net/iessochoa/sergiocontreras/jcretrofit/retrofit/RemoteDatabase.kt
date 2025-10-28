@@ -20,18 +20,21 @@ import retrofit2.converter.gson.GsonConverterFactory
  */
 class RemoteDatabase(private val scope: CoroutineScope, private val context: Context) {
 
+    private fun setupRetrofit(): Retrofit = Retrofit.Builder()
+            .baseUrl(Constants.BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+    private fun getLoginService(): LoginService = setupRetrofit().create(LoginService::class.java)
+
     fun login(
         user: UserInfo,
         onLogin: () -> Unit,
         onError: (String) -> Unit
     ) {
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        val service = getLoginService()
 
-        val service = retrofit.create(LoginService::class.java)
 
         scope.launch(Dispatchers.IO) {
             try {
@@ -53,12 +56,8 @@ class RemoteDatabase(private val scope: CoroutineScope, private val context: Con
         onError: (String) -> Unit
     ) {
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
 
-        val service = retrofit.create(LoginService::class.java)
+        val service = getLoginService()
 
         scope.launch(Dispatchers.IO) {
             try {

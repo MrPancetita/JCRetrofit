@@ -36,6 +36,13 @@ class MainActivity : ComponentActivity() {
                 val snackBarHostState = remember { SnackbarHostState() }
                 val scope = rememberCoroutineScope()
 
+                val showMsg = {msg: String ->
+                    scope.launch {
+                        snackBarHostState.showSnackbar(message = msg)
+                }
+
+                }
+
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     snackbarHost = { SnackbarHost(snackBarHostState) }
@@ -51,26 +58,13 @@ class MainActivity : ComponentActivity() {
                                        launchProfile()
                                    },
                                    onError = { error ->
-                                       Log.e("SERGIO", "onCreate: $error")
-                                       scope.launch {
-                                           snackBarHostState.showSnackbar(error)
-                                       }
-
-                                   }
+                                       //Log.e("SERGIO", "onCreate: $error")
+                                       showMsg(error) }
                                )
                            } else {
                                db.register(user,
-                                   onRegister = {
-                                       scope.launch {
-                                           snackBarHostState.showSnackbar(message = it)
-                                       }
-                                   },
-                                   onError = {
-                                       scope.launch {
-                                           snackBarHostState.showSnackbar(message = it)
-                                       }
-
-                                   })
+                                   onRegister = { showMsg(it) },
+                                   onError = { showMsg(it) })
                            }
                        }
                    )

@@ -123,7 +123,7 @@ fun MainView(
                     contentDescription = null,
                     modifier = Modifier.padding(end = dimensionResource(R.dimen.common_padding_min))
                 )
-                Text(text = stringResource(R.string.main_btn_login))
+                Text(text = if(isLogin) stringResource(R.string.main_btn_login) else stringResource(R.string.main_switch_register))
             }
 
 
