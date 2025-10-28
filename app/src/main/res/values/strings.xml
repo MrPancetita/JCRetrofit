@@ -8,4 +8,6 @@
     <string name="main_error_server_401">Unauthorized</string>
     <string name="main_error_server_403">Forbidden</string>
     <string name="main_error_default">Any other error</string>
+    <string name="main_switch_login">Login</string>
+    <string name="main_switch_register">Registrar</string>
 </resources>

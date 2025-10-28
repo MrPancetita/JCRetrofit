@@ -34,21 +34,22 @@ class RemoteDatabase(private val scope: CoroutineScope, private val context: Con
         val service = retrofit.create(LoginService::class.java)
 
         scope.launch(Dispatchers.IO) {
-            try{
+            try {
                 val result = service.loginUser(user)
                 Log.i("SERGIO", "login: ${result.token}")
                 if (result.token.isNotEmpty()) onLogin() //Si hemos logeado bien }
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 (e as? HttpException)?.let {
                     val error = checkError(e)
                     onError(error)
                 }
             }
         }
+    }
 
     fun register(
         user: UserInfo,
-        onRegister: () -> Unit,
+        onRegister: (String) -> Unit,
         onError: (String) -> Unit
     ) {
 
@@ -63,7 +64,7 @@ class RemoteDatabase(private val scope: CoroutineScope, private val context: Con
             try {
                 val result = service.registerUser(user)
                 Log.i("SERGIO", "register: ${result.id}")
-                if (result.token.isNotEmpty()) onLogin() //Si hemos logeado bien }
+                if (result.token.isNotEmpty()) onRegister("New id: ${result.id}") //Si hemos logeado bien }
             } catch (e: Exception) {
                 (e as? HttpException)?.let {
                     val error = checkError(e)
@@ -71,16 +72,6 @@ class RemoteDatabase(private val scope: CoroutineScope, private val context: Con
                 }
             }
         }
-    }
-
-
-
-        /* ESTO ERA TEMPORAL
-        if(user.email.contains("@")) {
-            onLogin()
-        } else {
-            onError(":(")
-        }*/
     }
 
     private fun checkError(e: HttpException): String = when(e.code()) {

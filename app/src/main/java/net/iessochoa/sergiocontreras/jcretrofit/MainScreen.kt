@@ -1,14 +1,20 @@
 package net.iessochoa.sergiocontreras.jcretrofit
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Login
+import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -42,7 +48,7 @@ fun MainPreview() {
                 .padding(top = 24.dp),
             inProgres = false,
             onGoUsers = { },
-            onClick = { _, -> }
+            onClick = {_,_-> }
         )
     }
 }
@@ -52,10 +58,11 @@ fun MainView(
     modifier: Modifier,
     inProgres: Boolean = false,
     onGoUsers: () -> Unit,
-    onClick: (UserInfo) -> Unit)
+    onClick: (UserInfo, Boolean) -> Unit)
 {
     var emailValue by remember { mutableStateOf("eve.holt@reqres.in") }
     var passwordValue by remember { mutableStateOf("cityslicka")}
+    var isLogin by remember { mutableStateOf(true) }
 
     Box(modifier = modifier) {
         Column (
@@ -83,10 +90,32 @@ fun MainView(
                     .padding(top = dimensionResource(R.dimen.common_padding_min)),
                 label = { Text (text = stringResource(R.string.main_hint_password))}
             )
+            Row (
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.common_padding_min)),
+                modifier = Modifier.padding(
+                    vertical = dimensionResource(R.dimen.common_padding_default),
+                )
+
+            ) {
+                Text(text = if(isLogin) stringResource(R.string.main_switch_login) else stringResource(
+                    R.string.main_switch_register
+                ))
+                Switch(checked = isLogin,
+                    onCheckedChange = {isLogin = it},
+                    thumbContent = {
+                        Icon(
+                            imageVector = Icons.Default.Repeat,
+                            contentDescription = null,
+                            modifier = Modifier.size(SwitchDefaults.IconSize))
+                    })
+            }
+
+
 
             Button(
                 onClick = { onClick(
-                    UserInfo(emailValue, passwordValue)
+                    UserInfo(emailValue, passwordValue), isLogin
                 ) }
             ) {
                 Icon(

@@ -44,19 +44,34 @@ class MainActivity : ComponentActivity() {
                        paddingValues = innerPadding),
                        inProgres = false,
                        onGoUsers = {},
-                       onClick = { user ->
-                            db.login(user,
-                                onLogin = {
-                                    launchProfile()
-                                },
-                                onError = { error ->
-                                    Log.e("SERGIO", "onCreate: $error")
-                                    scope.launch {
-                                        snackBarHostState.showSnackbar(error)
-                                    }
+                       onClick = { user, isLogin ->
+                           if (isLogin) {
+                               db.login(user,
+                                   onLogin = {
+                                       launchProfile()
+                                   },
+                                   onError = { error ->
+                                       Log.e("SERGIO", "onCreate: $error")
+                                       scope.launch {
+                                           snackBarHostState.showSnackbar(error)
+                                       }
 
-                                }
-                            )
+                                   }
+                               )
+                           } else {
+                               db.register(user,
+                                   onRegister = {
+                                       scope.launch {
+                                           snackBarHostState.showSnackbar(message = it)
+                                       }
+                                   },
+                                   onError = {
+                                       scope.launch {
+                                           snackBarHostState.showSnackbar(message = it)
+                                       }
+
+                                   })
+                           }
                        }
                    )
                 }
