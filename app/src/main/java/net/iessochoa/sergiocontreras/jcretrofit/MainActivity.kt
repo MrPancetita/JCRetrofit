@@ -13,8 +13,11 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
@@ -36,8 +39,11 @@ class MainActivity : ComponentActivity() {
                 val snackBarHostState = remember { SnackbarHostState() }
                 val scope = rememberCoroutineScope()
 
+                var inProgress by remember { mutableStateOf(false)}
+
                 val showMsg = {msg: String ->
                     scope.launch {
+                        inProgress = false
                         snackBarHostState.showSnackbar(message = msg)
                 }
 
@@ -49,13 +55,14 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                    MainView(Modifier.padding(
                        paddingValues = innerPadding),
-                       inProgres = false,
+                       inProgres = inProgress,
                        onGoUsers = {},
                        onClick = { user, isLogin ->
+                           inProgress = true
                            if (isLogin) {
                                db.login(user,
                                    onLogin = {
-                                       launchProfile()
+                                       launchProfile(); inProgress = false
                                    },
                                    onError = { error ->
                                        //Log.e("SERGIO", "onCreate: $error")
