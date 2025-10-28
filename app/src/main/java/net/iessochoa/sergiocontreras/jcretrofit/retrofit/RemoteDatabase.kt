@@ -6,7 +6,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.iessochoa.sergiocontreras.jcretrofit.R
+import net.iessochoa.sergiocontreras.jcretrofit.entities.SingleUserResponse
 import net.iessochoa.sergiocontreras.jcretrofit.entities.UserInfo
+import okhttp3.Dispatcher
 import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -26,6 +28,7 @@ class RemoteDatabase(private val scope: CoroutineScope, private val context: Con
             .build()
 
     private fun getLoginService(): LoginService = setupRetrofit().create(LoginService::class.java)
+    private fun getUserService(): UserService = setupRetrofit().create(UserService::class.java)
 
     fun login(
         user: UserInfo,
@@ -69,6 +72,19 @@ class RemoteDatabase(private val scope: CoroutineScope, private val context: Con
                     val error = checkError(e)
                     onError(error)
                 }
+            }
+        }
+    }
+
+    fun getSingleUser(onResult:(SingleUserResponse?) -> Unit) {
+        val service = getUserService()
+        scope.launch(Dispatchers.IO) {
+            try {
+                val result = service.getSingleUser()
+                onResult(result)
+            } catch (e: Exception) {
+                Log.e("SERGIO", "getSingleUser: ${e.message}")
+                onResult(null)
             }
         }
     }
