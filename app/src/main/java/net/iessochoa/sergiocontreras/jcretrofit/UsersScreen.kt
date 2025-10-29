@@ -54,7 +54,7 @@ fun UsersView(
             LazyColumn {
                 items(users.size) { index ->
                     val user = users[index]
-                    Text(user.getFullName())
+                    ItemUserView(user)
                 }
             }
         }
