@@ -1,5 +1,8 @@
 package net.iessochoa.sergiocontreras.jcretrofit
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -27,6 +30,7 @@ import net.iessochoa.sergiocontreras.jcretrofit.entities.Data
 import net.iessochoa.sergiocontreras.jcretrofit.entities.SingleUserResponse
 import net.iessochoa.sergiocontreras.jcretrofit.entities.Support
 import net.iessochoa.sergiocontreras.jcretrofit.ui.components.SergioCoilImage
+import net.iessochoa.sergiocontreras.jcretrofit.ui.components.SergioProgressFullScreen
 import net.iessochoa.sergiocontreras.jcretrofit.ui.theme.JCRetrofitTheme
 import net.iessochoa.sergiocontreras.jcretrofit.ui.theme.Typography
 
@@ -95,6 +99,15 @@ fun ProfileView(
                     modifier = Modifier.padding(bottom = dimensionResource(R.dimen.common_padding_default))
                 )
             }
+        }
+
+        AnimatedVisibility(
+            visible = inProgress,
+            enter = fadeIn(),
+            exit = fadeOut()
+
+        ) {
+            SergioProgressFullScreen()
         }
     }
 

@@ -12,4 +12,6 @@
     <string name="main_switch_register">Registrar</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="profile_error_user_not_found">Usuario no encontrado</string>
+    <string name="title_activity_users">UsersActivity</string>
+    <string name="users_title">Usuarios</string>
 </resources>

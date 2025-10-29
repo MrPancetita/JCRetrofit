@@ -57,7 +57,7 @@ class MainActivity : ComponentActivity() {
                    MainView(Modifier.padding(
                        paddingValues = innerPadding),
                        inProgres = inProgress,
-                       onGoUsers = {},
+                       onGoUsers = { launchUsers() },
                        onClick = { user, isLogin ->
                            inProgress = true
                            if (isLogin) {
@@ -83,13 +83,10 @@ class MainActivity : ComponentActivity() {
 
     private fun launchProfile() {
         startActivity(Intent(this, ProfileActivity::class.java))
+    }
 
-        /*
-        lifecycleScope.launch(Dispatchers.Main) {
-
-            Toast.makeText(this@MainActivity, "Entrando perfil del usuario...", Toast.LENGTH_SHORT).show()
-        }
-        */
+    private fun launchUsers() {
+        startActivity(Intent(this, UsersActivity::class.java))
     }
 
 
