@@ -51,11 +51,14 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
 
-
+    /*RETROFIT*/
     implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
+    /*COIL*/
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 
 
     testImplementation(libs.junit)

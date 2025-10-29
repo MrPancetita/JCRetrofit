@@ -9,6 +9,7 @@
     <dimen name="common_padding_large">32dp</dimen>
     <dimen name="common_padding_x_large">64dp</dimen>
     <dimen name="img_item_list">128dp</dimen>
+    <dimen name="img_cover_size">160dp</dimen>
     <dimen name="divider_height">1dp</dimen>
 
 </resources>

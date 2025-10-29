@@ -7,7 +7,7 @@ import retrofit2.http.Headers
 interface UserService {
 
     @Headers("x-api-key: reqres-free-v1")
-    @GET(Constants.USERS_PATH + Constants.ID_PATH)
+    @GET(Constants.API_PATH + Constants.USERS_PATH + Constants.ID_PATH)
     suspend fun getSingleUser(): SingleUserResponse
 
 }

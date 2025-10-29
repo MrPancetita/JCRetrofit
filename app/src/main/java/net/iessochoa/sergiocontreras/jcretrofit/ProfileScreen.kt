@@ -4,13 +4,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import net.iessochoa.sergiocontreras.jcretrofit.entities.Data
 import net.iessochoa.sergiocontreras.jcretrofit.entities.SingleUserResponse
 import net.iessochoa.sergiocontreras.jcretrofit.entities.Support
@@ -50,6 +55,16 @@ fun ProfileView(
                 .padding(dimensionResource(R.dimen.common_padding_default)),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
+
+                //La imagen Coil
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(response.data.avatar)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = null,
+                    modifier = Modifier.size(dimensionResource(R.dimen.img_cover_size))
+                )
                 Text(
                     text = response.data.getFullName(),
                     modifier = Modifier.padding(vertical = dimensionResource(R.dimen.common_padding_default)),

@@ -7,28 +7,79 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import net.iessochoa.sergiocontreras.jcretrofit.entities.Data
 import net.iessochoa.sergiocontreras.jcretrofit.entities.SingleUserResponse
 import net.iessochoa.sergiocontreras.jcretrofit.entities.Support
+import net.iessochoa.sergiocontreras.jcretrofit.retrofit.RemoteDatabase
 import net.iessochoa.sergiocontreras.jcretrofit.ui.theme.JCRetrofitTheme
 
 class ProfileActivity : ComponentActivity() {
+
+    private val db: RemoteDatabase by lazy { RemoteDatabase(lifecycleScope, this) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             JCRetrofitTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                val snackBarHostState = remember { SnackbarHostState() }
+                val scope = rememberCoroutineScope()
+
+                var inProgress by remember { mutableStateOf(false) }
+                var userResponse by remember { mutableStateOf<SingleUserResponse?>(null)}
+
+                Scaffold(modifier = Modifier.fillMaxSize(),
+                    snackbarHost = { SnackbarHost(snackBarHostState) }) { innerPadding ->
                     ProfileView(
                         modifier = Modifier.padding(innerPadding),
-                        response = null,
-                        inProgress = false
+                        response = userResponse,
+                        inProgress = inProgress
                     )
                 }
+
+                val lifecycleObserver = LifecycleEventObserver { _, event ->
+                    when (event) {
+                        Lifecycle.Event.ON_START -> {
+                            inProgress = true
+                            db.getSingleUser { response ->
+                                if (response != null) { //Consulta exitosa trajo datos
+                                    userResponse = response
+                                } else {
+                                    scope.launch {
+                                        snackBarHostState.showSnackbar(getString(R.string.profile_error_user_not_found))
+                                    }
+                                }
+                                inProgress = false  //Independientemente de si es o no un exito, se quita
+                            }
+                        }
+                        else -> {}
+                    }
+                }
+                val lifecycle = LocalLifecycleOwner.current.lifecycle
+                DisposableEffect(lifecycle) {
+                    lifecycle.addObserver(lifecycleObserver)
+                    onDispose {
+                        lifecycle.removeObserver(lifecycleObserver)
+                    }
+                }
+
             }
         }
     }
