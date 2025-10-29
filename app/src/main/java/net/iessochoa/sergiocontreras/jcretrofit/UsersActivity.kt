@@ -21,11 +21,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import net.iessochoa.sergiocontreras.jcretrofit.entities.Data
+import net.iessochoa.sergiocontreras.jcretrofit.retrofit.RemoteDatabase
 import net.iessochoa.sergiocontreras.jcretrofit.ui.theme.JCRetrofitTheme
 
 class UsersActivity : ComponentActivity() {
+    private val db: RemoteDatabase by lazy { RemoteDatabase(lifecycleScope, this) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -57,6 +61,12 @@ class UsersActivity : ComponentActivity() {
                     when (event) {
                         Lifecycle.Event.ON_START -> {
                             inProgress = true
+                            db.getListUsers { response ->
+                                if (response != null) {
+                                    users = response.data
+                                }
+                                inProgress = false
+                            }
                             users = getUsers()
                         }
                         else -> {}

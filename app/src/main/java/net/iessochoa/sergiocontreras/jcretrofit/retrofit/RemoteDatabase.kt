@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 import net.iessochoa.sergiocontreras.jcretrofit.R
 import net.iessochoa.sergiocontreras.jcretrofit.entities.SingleUserResponse
 import net.iessochoa.sergiocontreras.jcretrofit.entities.UserInfo
+import net.iessochoa.sergiocontreras.jcretrofit.entities.UsersResponse
 import okhttp3.Dispatcher
 import retrofit2.HttpException
 import retrofit2.Retrofit
@@ -84,6 +85,19 @@ class RemoteDatabase(private val scope: CoroutineScope, private val context: Con
                 onResult(result)
             } catch (e: Exception) {
                 Log.e("SERGIO", "getSingleUser: ${e.message}")
+                onResult(null)
+            }
+        }
+    }
+
+    fun getListUsers(onResult:(UsersResponse?) -> Unit) {
+        val service = getUserService()
+        scope.launch(Dispatchers.IO) {
+            try {
+                val result = service.getListUsers()
+                onResult(result)
+            } catch (e: Exception) {
+                Log.e("SERGIO", "getListUsers: ${e.message}")
                 onResult(null)
             }
         }
