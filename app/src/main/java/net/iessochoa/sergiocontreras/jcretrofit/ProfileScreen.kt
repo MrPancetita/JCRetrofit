@@ -19,6 +19,7 @@ import coil3.request.crossfade
 import net.iessochoa.sergiocontreras.jcretrofit.entities.Data
 import net.iessochoa.sergiocontreras.jcretrofit.entities.SingleUserResponse
 import net.iessochoa.sergiocontreras.jcretrofit.entities.Support
+import net.iessochoa.sergiocontreras.jcretrofit.ui.components.SergioCoilImage
 import net.iessochoa.sergiocontreras.jcretrofit.ui.theme.JCRetrofitTheme
 import net.iessochoa.sergiocontreras.jcretrofit.ui.theme.Typography
 
@@ -57,14 +58,8 @@ fun ProfileView(
             ){
 
                 //La imagen Coil
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(response.data.avatar)
-                        .crossfade(true)
-                        .build(),
-                    contentDescription = null,
-                    modifier = Modifier.size(dimensionResource(R.dimen.img_cover_size))
-                )
+                SergioCoilImage(response.data.avatar, R.dimen.img_cover_size)
+
                 Text(
                     text = response.data.getFullName(),
                     modifier = Modifier.padding(vertical = dimensionResource(R.dimen.common_padding_default)),
@@ -77,7 +72,7 @@ fun ProfileView(
                 Text(
                     text = response.support.text,
                     modifier = Modifier.padding(top = dimensionResource(R.dimen.common_padding_default)),
-                    style = Typography.headlineSmall
+                    style = Typography.bodyLarge
                 )
 
             }
