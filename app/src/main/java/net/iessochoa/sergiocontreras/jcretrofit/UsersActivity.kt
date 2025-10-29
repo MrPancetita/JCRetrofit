@@ -10,6 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,6 +18,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import kotlinx.coroutines.launch
+import net.iessochoa.sergiocontreras.jcretrofit.entities.Data
 import net.iessochoa.sergiocontreras.jcretrofit.ui.theme.JCRetrofitTheme
 
 class UsersActivity : ComponentActivity() {
@@ -31,12 +37,40 @@ class UsersActivity : ComponentActivity() {
 
                 var inProgress by remember { mutableStateOf(false)}
 
+                var users by remember { mutableStateOf(listOf<Data>())}
+
+
+
                 Scaffold(modifier = Modifier.fillMaxSize(),
                     snackbarHost = { SnackbarHost(snackBarHostState) })
                 { innerPadding ->
-                    UsersView(modifier = Modifier.padding(innerPadding), 
+                    UsersView(modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                        users = users,
                         inProgress = inProgress)
                 }
+
+
+
+                val lifecycleObserver = LifecycleEventObserver { _, event ->
+                    when (event) {
+                        Lifecycle.Event.ON_START -> {
+                            inProgress = true
+                            users = getUsers()
+                        }
+                        else -> {}
+                    }
+                }
+                val lifecycle = LocalLifecycleOwner.current.lifecycle
+                DisposableEffect(lifecycle) {
+                    lifecycle.addObserver(lifecycleObserver)
+                    onDispose {
+                        lifecycle.removeObserver(lifecycleObserver)
+                    }
+                }
+
+
             }
         }
     }
